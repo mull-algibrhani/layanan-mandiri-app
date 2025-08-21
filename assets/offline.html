@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Offline</title>
+ <style>
+ body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, sans-serif;
+  background-color: #f3f4f6;
+  color: #374151;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+ }
+
+ svg {
+  width: 140px;
+  height: 140px;
+  margin-bottom: 24px;
+  color: #3b82f6;
+ }
+
+ h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+ }
+
+ p {
+  margin-bottom: 1.5rem;
+  color: #6b7280;
+ }
+
+ button {
+  padding: 0.6rem 1.25rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+ }
+
+ button:hover {
+  background-color: #1d4ed8;
+ }
+ </style>
+</head>
+
+<body>
+
+ <!-- SVG Ilustrasi WiFi Rusak -->
+ <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path stroke-linecap="round" stroke-linejoin="round"
+   d="M2.25 7.5a15.3 15.3 0 0119.5 0M4.5 10.5a10.2 10.2 0 0115 0M7.5 13.5a5.1 5.1 0 019 0M12 18.75h.008v.008H12v-.008zM3 3l18 18" />
+ </svg>
+
+ <h1>Oops! Koneksi Terputus</h1>
+ <p>Tidak ada koneksi internet</p>
+
+ <button onclick="window.location.reload()">Refresh</button>
+
+</body>
+
+</html>

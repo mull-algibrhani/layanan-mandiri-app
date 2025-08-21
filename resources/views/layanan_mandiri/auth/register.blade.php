@@ -2,12 +2,12 @@
 
 @section('content')
     <form id="validasi" action="<?= $form_action ?>" method="post" class="login-form" enctype="multipart/form-data">
-        <h3><strong>PENDAFTARAN AKUN LAYANAN MANDIRI</strong></h3>
-        <div class="row">
-            <div class="col-md-6">
+        <h3 style="margin-bottom: 15px;"><strong>PENDAFTARAN AKUN LAYANAN MANDIRI</strong></h3>
+        <div class="col-xs-12 col-md-6">
+            <div class="">
                 <div class="form-group">
                     <input
-                        style="height: 30px"
+                    style="height: 30px"
                         type="text"
                         autocomplete="off"
                         class="form-control required <?= jecho($cek_anjungan['keyboard'] == 1, true, 'kbvnumber') ?>"
@@ -17,10 +17,10 @@
                     >
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="input-group" style="margin-bottom: 15px">
+            <div class="form-group">
+                <div class="input-group">
                     <input
-                        style="height: 30px"
+                    style="height: 30px"
                         placeholder="Tanggal Lahir"
                         type="text"
                         class="form-control required <?= jecho($cek_anjungan['keyboard'] == 1, true, 'kbvnumber') ?>"
@@ -33,8 +33,8 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
+        <div class="col-xs-12 col-md-6">
+            <div class="">
                 <div class="form-group">
                     <input
                         style="height: 30px"
@@ -49,7 +49,7 @@
                     >
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="">
                 <div class="form-group">
                     <input
                         style="height: 30px"
@@ -65,38 +65,9 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <input
-                        style="height: 30px"
-                        type="text"
-                        autocomplete="off"
-                        class="form-control required <?= jecho($cek_anjungan['keyboard'] == 1, true, 'kbvnumber') ?>"
-                        name="email"
-                        placeholder="Email"
-                        value="{{ old('email') }}"
-                    >
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="input-group" style="margin-bottom: 15px">
-                    <input
-                        style="height: 30px"
-                        type="text"
-                        autocomplete="off"
-                        class="form-control required <?= jecho($cek_anjungan['keyboard'] == 1, true, 'kbvnumber') ?>"
-                        name="telegram"
-                        placeholder="Telegram"
-                        value="{{ old('telegram') }}"
-                    >
-                    <span class="input-group-addon"><i onclick="window.open('https://t.me/opensid_notifikasi_bot', '_blank');" class="fa fa-search"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="input-group" style="margin-bottom: 15px">
+        <div class="col-xs-12 col-md-6">
+            <div class="form-group">
+                <div class="input-group">
                     <input
                         style="height: 30px"
                         type="password"
@@ -109,8 +80,8 @@
                     <span class="input-group-addon"><i onclick="show(this)" class="fa fa-eye-slash"></i></span>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="input-group" style="margin-bottom: 15px">
+            <div class="form-group">
+                <div class="input-group">
                     <input
                         style="height: 30px"
                         type="password"
@@ -124,38 +95,68 @@
                 </div>
             </div>
         </div>
+        <div class="col-xs-12 col-md-6">
+            <div class="">
+                <div class="form-group">
+                    <input
+                        style="height: 30px"
+                        type="text"
+                        autocomplete="off"
+                        class="form-control required <?= jecho($cek_anjungan['keyboard'] == 1, true, 'kbvnumber') ?>"
+                        name="email"
+                        placeholder="Email"
+                        value="{{ old('email') }}"
+                    >
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <input
+                        style="height: 30px"
+                        type="text"
+                        autocomplete="off"
+                        class="form-control required <?= jecho($cek_anjungan['keyboard'] == 1, true, 'kbvnumber') ?>"
+                        name="telegram"
+                        placeholder="User ID Telegram"
+                        value="{{ old('telegram') }}"
+                    >
+                    <span class="input-group-addon"><i onclick="window.open('https://t.me/userinfobot', '_blank');" class="fa fa-search"></i></span>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group">
-            <div class="row">
-                <div class="col-sm-4">
+            <div class="col-xs-12" style="margin-bottom: 10px;">
+                <div class="">
                     <label class="control-label">Unggah Scan KTP</label>
                 </div>
-                <div class="col-sm-8">
-                    <input style="height: 30px" type="file" id="fileInput" name="scan_1" class="form-control required" accept=".gif,.jpg,.jpeg,.png">
+                <div class="">
+                    <input type="file" id="fileInput" name="scan_1" class="form-control required" accept=".gif,.jpg,.jpeg,.png">
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <div class="row">
-                <div class="col-sm-4">
+            <div class="col-xs-12" style="margin-bottom: 10px;">
+                <div class="">
                     <label class="control-label">Unggah Scan KK</label>
                 </div>
-                <div class="col-sm-8">
-                    <input style="height: 30px" type="file" id="fileInput" name="scan_2" class="form-control required" accept=".gif,.jpg,.jpeg,.png">
+                <div class="">
+                    <input type="file" id="fileInput" name="scan_2" class="form-control required" accept=".gif,.jpg,.jpeg,.png">
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <div class="row">
-                <div class="col-sm-4">
+            <div class="col-xs-12" style="margin-bottom: 10px;">
+                <div class="">
                     <label class="control-label">Unggah Foto Selfie dan Membawa KTP</label>
                 </div>
-                <div class="col-sm-8">
-                    <input style="height: 30px" type="file" id="fileInput" name="scan_3" class="form-control required" accept=".gif,.jpg,.jpeg,.png">
+                <div class="">
+                    <input type="file" id="fileInput" name="scan_3" class="form-control required" accept=".gif,.jpg,.jpeg,.png">
                 </div>
             </div>
         </div>
-        <div class="center">
-            <small style="color: crimson; font-size: 12px;">Gambar ukuran maksimal: 1024kb, tipe gambar: .gif,.jpg,.jpeg,.png </small>
+        <div class="center" style="margin-bottom: 5px;">
+            <small style="color: crimson; font-size: 12px;">Ukuran gambar maksimal: 1 MB | Type gambar: .gif,.jpg,.jpeg,.png </small>
         </div>
 
         <div class="form-group">

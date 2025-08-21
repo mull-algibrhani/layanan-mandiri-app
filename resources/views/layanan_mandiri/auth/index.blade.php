@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="{{ asset('css/daftar-form-elements.css') }}" media="screen">
     <link rel="stylesheet" href="{{ asset('css/siteman_mandiri.css') }}" media="screen">
     <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.bar.css') }}" media="screen">
+    <!-- Manifest json -->
+    <link rel="manifest" href="{{ asset('manifest.json') }}"/>
+    <!-- service worker -->
+    <script>navigator.serviceWorker.register("{{ asset('sw.js') }}")</script>
     <!-- bootstrap datetimepicker -->
     <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap-datetimepicker.min.css') }}">
     @if (is_file('desa/pengaturan/siteman/siteman_mandiri.css'))
@@ -56,11 +60,13 @@
                                 <h1>LAYANAN MANDIRI<br />
                                     {{ ucwords(setting('sebutan_desa')) }} {{ $desa['nama_desa'] }}</h1>
                                 <h3>
-                                    <br />{{ ucwords(setting('sebutan_kecamatan')) }} {{ $desa['nama_kecamatan'] }}
-                                    <br />{{ ucwords(setting('sebutan_kabupaten')) }} {{ $desa['nama_kabupaten'] }}
+                                    <br />{{ ucwords(setting('sebutan_kecamatan')) }} {{ $desa['nama_kecamatan'] }}, {{ ucwords(setting('sebutan_kabupaten')) }} {{ $desa['nama_kabupaten'] }}
+                                    <br />
                                     <br />{{ $desa['alamat_kantor'] }}
                                     <br />Kodepos {{ $desa['kode_pos'] }}
                                     <br /><br />Silakan hubungi operator desa untuk mendapatkan kode PIN anda.
+                                    <br />
+                                    <br />{{ $desa['hp_kontak'] }}
                                     <br /><br /><br />IP Address: {{ request()->ip() }}
                                     <br />ID Pengunjung : <span id="pengunjung"></span>&nbsp;<span><a href="#" class="copy" title="Copy" style="color: white"><i class="fa fa-copy"></i></a></span>
                                     @if ($cek_anjungan)
@@ -113,7 +119,6 @@
 
     @include('admin.layouts.components.konfirmasi_cookie', ['cookie_name' => 'pengunjung'])
     @include('admin.layouts.components.aktifkan_cookie')
-
     <!-- jQuery 3 -->
     <script src="{{ asset('bootstrap/js/jquery.min.js') }}"></script>
     <!-- Bootstrap 3.3.7 -->

@@ -41,7 +41,14 @@ defined('BASEPATH') || exit('No direct script access allowed');
 
 // Definisi Rute Default
 // Route::get('/', 'First@index');
-Route::get('/index/{p?}', 'First@index');
+// Route::get('/index/{p?}', 'First@index');
+Route::get('/', function () {
+    return redirect('/layanan-mandiri');
+});
+
+Route::get('/login', function () {
+    return redirect('/siteman');
+});
 
 // Rute untuk error 404 (Override)
 Route::error('404_override', static function (): void {

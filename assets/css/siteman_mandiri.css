@@ -44,10 +44,13 @@ li.list-item-layan:hover {
 li.list-item-layan a {
   color: teal;
   display: block;
+  text-decoration: none !important;
 }
 li.list-item-layan a:hover {
   color: #fff;
+  text-decoration: none !important;
 }
+
 
 .login .row {
   display: flex;
@@ -55,16 +58,25 @@ li.list-item-layan a:hover {
   justify-content: center;
 }
 
-.login .top-content .inner-bg {
+.login .top-content .inner-bg{
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0;
   padding: 0;
   height: 100vh;
-  max-width: 100%;
+  width: 100%;
   background: rgba(9, 9, 9, 0.4);
 }
+
+/* Mobile */
+@media (max-width: 767px) {
+  .login .top-content .inner-bg {
+    height: 100%;   /* atau 100vh juga bisa */
+    min-height: 100vh; /* pastikan tetap menutupi layar */
+  }
+}
+
 
 .login .container {
   width: 90%;
@@ -97,7 +109,7 @@ li.list-item-layan a:hover {
 }
 
 .login .form-box > .form-top {
-  background: teal;
+  background:rgb(3, 109, 196);
 }
 
 .login .form-top > .login-footer-top {
@@ -117,7 +129,7 @@ li.list-item-layan a:hover {
 }
 
 .login .form-top > .login-footer-top h3 {
-  color: #ccc;
+  color: rgb(229, 235, 240);
   text-transform: unset;
   letter-spacing: 1px;
 }
@@ -139,6 +151,16 @@ li.list-item-layan a:hover {
   border-radius: 5px;
   font-family: "Montserrat", sans-serif;
   font-weight: 400;
+   color: black; /* warna teks saat user mengetik */
+}
+.login .login-form input.form-control:focus {
+  color: black; /* warna teks saat user mengetik */
+}
+
+/* supaya placeholder tetap abu-abu */
+.login .login-form input.form-control::placeholder {
+  color: gray;
+  opacity: 1; /* biar konsisten di semua browser */
 }
 .hubungi {
   border: 2px solid #ccc;
@@ -158,14 +180,13 @@ li.list-item-layan a:hover {
   background: #ccc;
   color: teal;
   cursor: pointer;
-  text-decoration: none;
 }
 
 .login button.btn {
   width: 100% !important;
-  border: 2px solid teal;
+  border: 2px solid rgb(3, 109, 196);
   background: transparent;
-  color: teal;
+  color: rgb(3, 109, 196);
   transition: all 0.4s;
   margin-top: 0;
   font-family: "Montserrat", sans-serif;
@@ -174,9 +195,10 @@ li.list-item-layan a:hover {
 }
 
 .login button.btn:hover {
-  background: teal;
+  background: rgb(3, 109, 196);
   color: #fff;
   opacity: 1;
+  text-decoration: none !important;
 }
 
 @media screen and (min-width: 768px) {
@@ -191,13 +213,13 @@ li.list-item-layan a:hover {
   }
 
   .login .form-box > [class*="form-"] {
-    padding: 70px 40px;
+    padding: 50px 20px;
   }
 
   .login .form-box > .form-top {
     color: #fff;
     position: relative;
-    width: 60%;
+    width: 50%;
   }
 
   .form-top img {
@@ -224,4 +246,13 @@ li.list-item-layan a:hover {
     padding: 0px 15px;
     height: auto;
   }
+  .form-group a {
+  text-decoration: none;
+}
+
+.form-group a:hover {
+  text-decoration: none;
+}
+
+
 }
