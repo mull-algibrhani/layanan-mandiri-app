@@ -6,7 +6,8 @@
 # --- Folder ---
 /desa/
 /esensi/
-/assests/themes
+/assets/themes/
+/assets/modules/
 # --- Cache Files ---
 /storage/logs/
 /storage/framework/
