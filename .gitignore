@@ -1,0 +1,16 @@
+# --- File-file Editor & IDE ---
+.vscode/
+.idea/
+.env
+.htaccess
+# --- Folder ---
+/desa/
+/esensi/
+/assests/themes
+# --- Cache Files ---
+/storage/logs/
+/storage/framework/
+# --- Dependencies (jika ada) ---
+/node_modules/
+
+
