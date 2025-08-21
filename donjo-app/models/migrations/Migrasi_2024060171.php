@@ -101,7 +101,7 @@ class Migrasi_2024060171 extends MY_Model
         Modul::where('slug', 'widget')->update(['url' => 'web_widget']);
         Modul::where('slug', 'pengunjung')->update(['url' => 'pengunjung']);
         Modul::where('slug', 'klasifikasi-surat')->update(['url' => 'klasifikasi']);
-        Modul::where('slug', 'qr-code')->update(['url' => 'qrcode']);
+        Modul::where('slug', 'qr-code')->update(['url' => 'qr_code']);
         Modul::where('slug', 'pengaturan-grup')->update(['url' => 'grup']);
         Modul::where('slug', 'artikel')->update(['url' => 'web']);
         Modul::where('slug', 'buku-ktp-dan-kk')->update(['url' => 'bumindes_penduduk_ktpkk']);
