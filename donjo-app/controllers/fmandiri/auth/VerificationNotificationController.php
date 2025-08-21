@@ -52,9 +52,18 @@ class VerificationNotificationController extends Web_Controller
         }
     }
 
+    //JIka belum belum verifikasi telegram dan email wajib verifikasi semua
+    // public function telegram()
+    // {
+    //     return auth('penduduk')->user()->hasVerifiedTelegram()
+    //         ? redirect('layanan-mandiri/beranda')
+    //         : view('layanan_mandiri.auth.verify');
+    // }
+
+    //JIka sudah verifikasi telegram maka email tidak wajib verifikasi
     public function telegram()
     {
-        return auth('penduduk')->user()->hasVerifiedTelegram()
+        return (auth('penduduk')->user()->hasVerifiedEmail() || auth('penduduk')->user()->hasVerifiedTelegram())
             ? redirect('layanan-mandiri/beranda')
             : view('layanan_mandiri.auth.verify');
     }
@@ -126,9 +135,18 @@ class VerificationNotificationController extends Web_Controller
         redirect_with('notif', 'Anda sudah terdaftar di Layanan Mandiri. Saat ini, akun Anda sedang ditinjau oleh admin. Silakan tunggu konfirmasi lebih lanjut sebelum dapat melakukan login.', 'layanan-mandiri/masuk');
     }
 
+    //JIka belum belum verifikasi telegram dan email wajib verifikasi semua
+    // public function email()
+    // {
+    //     return auth('penduduk')->user()->hasVerifiedEmail()
+    //         ? redirect('layanan-mandiri/beranda')
+    //         : view('layanan_mandiri.auth.verify');
+    // }
+
+    //JIka sudah verifikasi email maka telegram tidak wajib verifikasi
     public function email()
     {
-        return auth('penduduk')->user()->hasVerifiedEmail()
+        return (auth('penduduk')->user()->hasVerifiedEmail() || auth('penduduk')->user()->hasVerifiedTelegram())
             ? redirect('layanan-mandiri/beranda')
             : view('layanan_mandiri.auth.verify');
     }
@@ -184,19 +202,39 @@ class VerificationNotificationController extends Web_Controller
 
         $user->markEmailAsVerified();
 
-        if (! $user->hasVerifiedTelegram()) {
-            redirect('layanan-mandiri/daftar/verifikasi/telegram');
+        //Wajib Verifikas email dan telegram
+        // if (! $user->hasVerifiedTelegram()) {
+        //     redirect('layanan-mandiri/daftar/verifikasi/telegram');
+        // }
+
+        // // Logout user after verify
+        // auth('penduduk')->logout();
+
+        // $this->session->unset_userdata([
+        //     'mandiri', 'is_login',
+        //     'is_anjungan', 'data_permohonan',
+        //     'auth_mandiri', 'login_ektp',
+        // ]);
+
+        // redirect_with('notif', 'Anda sudah terdaftar di Layanan Mandiri. Saat ini, akun Anda sedang ditinjau oleh admin. Silakan tunggu konfirmasi lebih lanjut sebelum dapat melakukan login.', 'layanan-mandiri/masuk');
+
+        // cukup salah satu (email atau telegram)
+        if ($user->hasVerifiedEmail() || $user->hasVerifiedTelegram()) {
+            // Logout user after verify
+            auth('penduduk')->logout();
+
+            $this->session->unset_userdata([
+                'mandiri', 'is_login',
+                'is_anjungan', 'data_permohonan',
+                'auth_mandiri', 'login_ektp',
+            ]);
+
+            return redirect_with(
+                'notif',
+                'Anda sudah terdaftar di Layanan Mandiri. Saat ini, akun Anda sedang ditinjau oleh admin. Silakan tunggu konfirmasi lebih lanjut sebelum dapat melakukan login.',
+                'layanan-mandiri/masuk'
+            );
         }
 
-        // Logout user after verify
-        auth('penduduk')->logout();
-
-        $this->session->unset_userdata([
-            'mandiri', 'is_login',
-            'is_anjungan', 'data_permohonan',
-            'auth_mandiri', 'login_ektp',
-        ]);
-
-        redirect_with('notif', 'Anda sudah terdaftar di Layanan Mandiri. Saat ini, akun Anda sedang ditinjau oleh admin. Silakan tunggu konfirmasi lebih lanjut sebelum dapat melakukan login.', 'layanan-mandiri/masuk');
     }
 }

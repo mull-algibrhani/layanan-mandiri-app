@@ -116,8 +116,40 @@ class RegisteredUserController extends Web_Controller
         $penduduk->save();
 
         // Check if the 'Penduduk' is already registered for 'Layanan Mandiri'
+        // if (null !== $mandiri = $penduduk->mandiri()->first()) {
+        //     // Check if it is not already verified
+        //     if (! $mandiri->hasVerifiedEmail() || ! $mandiri->hasVerifiedTelegram()) {
+        //         Auth::guard('penduduk')->login($mandiri);
+        //         event(new Registered($mandiri));
+
+        //         return redirect('layanan-mandiri/daftar/verifikasi/email');
+        //     }
+
+        //     return redirect_with('notif', 'Anda sudah terdaftar di Layanan Mandiri. Saat ini, akun Anda sedang ditinjau oleh admin. Silakan tunggu konfirmasi lebih lanjut sebelum dapat melakukan login.', 'layanan-mandiri/masuk');
+        // }
+
+        // kalau email belum dan telegram belum → wajib verifikasi
+        // if (! $mandiri->hasVerifiedEmail() && ! $mandiri->hasVerifiedTelegram()) {
+        //     Auth::guard('penduduk')->login($mandiri);
+        //     event(new Registered($mandiri));
+
+        //     // arahkan sesuai metode verifikasi yang Anda inginkan
+
+        //       //Redirect ke verivikasi telegram
+        //     if (! $mandiri->hasVerifiedEmail()) {
+        //         return redirect('layanan-mandiri/daftar/verifikasi/email');
+        //     }
+
+        //       //Redirect ke verivikasi telegram
+        //     if (! $mandiri->hasVerifiedTelegram()) {
+        //         return redirect('layanan-mandiri/daftar/verifikasi/telegram');
+        //     }
+
+        //         return redirect_with('notif', 'Anda sudah terdaftar di Layanan Mandiri. Saat ini, akun Anda sedang ditinjau oleh admin. Silakan tunggu konfirmasi lebih lanjut sebelum dapat melakukan login.', 'layanan-mandiri/masuk');
+        // }
+
+        // kalau email belum dan telegram belum → wajib verifikasi
         if (null !== $mandiri = $penduduk->mandiri()->first()) {
-            // Check if it is not already verified
             if (! $mandiri->hasVerifiedEmail() || ! $mandiri->hasVerifiedTelegram()) {
                 Auth::guard('penduduk')->login($mandiri);
                 event(new Registered($mandiri));
@@ -125,8 +157,13 @@ class RegisteredUserController extends Web_Controller
                 return redirect('layanan-mandiri/daftar/verifikasi/email');
             }
 
-            return redirect_with('notif', 'Anda sudah terdaftar di Layanan Mandiri. Saat ini, akun Anda sedang ditinjau oleh admin. Silakan tunggu konfirmasi lebih lanjut sebelum dapat melakukan login.', 'layanan-mandiri/masuk');
+            return redirect_with(
+                'notif',
+                'Anda sudah terdaftar di Layanan Mandiri. Saat ini, akun Anda sedang ditinjau oleh admin. Silakan tunggu konfirmasi lebih lanjut sebelum dapat melakukan login.',
+                'layanan-mandiri/masuk'
+            );
         }
+
 
         // Store files
         $filePaths = [

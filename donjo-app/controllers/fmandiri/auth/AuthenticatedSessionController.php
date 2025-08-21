@@ -111,21 +111,103 @@ class AuthenticatedSessionController extends Web_Controller
     /**
      * Handle an incoming authentication request.
      */
+    //store default
+    // public function store()
+    // {
+    //     $request = request();
+
+    //     if ($request->has('nik') || ($request->has('tag_id_card') && $request->has('password'))) {
+    //         // Login menggunakan NIK atau E-KTP dan password
+    //         $this->authenticate([
+    //             'query' => fn ($q) => $q->when(
+    //                 $this->caseQueryExist($request),
+    //                 static fn ($q) => $q->status(0),
+    //                 static fn ($q) => $q->status(1)
+    //             ),
+    //         ]);
+    //     } elseif ($request->has('tag_id_card')) {
+    //         // Login menggunakan E-KTP tanpa password
+    //         $this->authenticateEktp($request);
+    //     }
+
+    //     $this->session->sess_regenerate();
+
+    //     if ($this->session->is_anjungan) {
+    //         redirect(route('anjungan.beranda.index'));
+    //     }
+    //     redirect(route('layanan-mandiri.beranda.index'));
+    // }
+
+    // store modifikasi 1
+    // public function store()
+    // {
+    //     $request = request();
+
+    //     // Cek login menggunakan NIK atau E-KTP dan password
+    //     if ($request->has('nik') || ($request->has('tag_id_card') && $request->has('password'))) {
+    //         $this->authenticate([
+    //             'query' => function ($q) use ($request) {
+    //                 // Selalu filter user yang aktif = 1 (disetujui admin)
+    //                 $q->where('aktif', 1);
+
+    //                 // Bisa tetap cek dokumen lengkap jika perlu
+    //                 $q->when(
+    //                     $this->caseQueryExist($request),
+    //                     static fn ($q) => $q->status(0),
+    //                     static fn ($q) => $q->status(1)
+    //                 );
+    //             },
+    //         ]);
+    //     } elseif ($request->has('tag_id_card')) {
+    //         // Login menggunakan E-KTP tanpa password
+    //         $user = PendudukMandiri::where('tag_id_card', $request->tag_id_card)
+    //             ->where('aktif', 1) // Hanya yang disetujui admin
+    //             ->first();
+
+    //         if (! $user) {
+    //             $this->session->set_flashdata('notif', 'Akun belum disetujui admin atau belum lengkap.');
+    //             return redirect('layanan-mandiri/masuk');
+    //         }
+
+    //         $this->authenticateEktp($request);
+    //     }
+
+    //     $this->session->sess_regenerate();
+
+    //     if ($this->session->is_anjungan) {
+    //         redirect(route('anjungan.beranda.index'));
+    //     }
+
+    //     redirect(route('layanan-mandiri.beranda.index'));
+    // }
+
+    // store modifikasi 2
     public function store()
     {
         $request = request();
 
+        // Ambil user berdasarkan credential (NIK atau E-KTP)
+        $pendudukQuery = PendudukMandiri::query()
+            ->when($request->has('nik'), fn($q) => $q->whereRelation('penduduk', 'nik', $request->nik))
+            ->when($request->has('tag_id_card'), fn($q) => $q->whereRelation('penduduk', 'tag_id_card', $request->tag_id_card))
+            ->first();
+
+        // Cek jika user ditemukan tapi belum disetujui admin
+        if ($pendudukQuery && $pendudukQuery->aktif === 0) {
+            $this->session->set_flashdata('notif', 'Akun Anda masih menunggu verifikasi oleh admin.');
+            return redirect('layanan-mandiri/masuk');
+        }
+
+        // Jika user tidak ditemukan
+        if (! $pendudukQuery) {
+            $this->session->set_flashdata('notif', 'Identitas Anda tidak cocok dengan database kami.');
+            return redirect('layanan-mandiri/masuk');
+        }
+
+        // Lanjutkan proses autentikasi autentikasi tanpa filter aktif
         if ($request->has('nik') || ($request->has('tag_id_card') && $request->has('password'))) {
-            // Login menggunakan NIK atau E-KTP dan password
-            $this->authenticate([
-                'query' => fn ($q) => $q->when(
-                    $this->caseQueryExist($request),
-                    static fn ($q) => $q->status(0),
-                    static fn ($q) => $q->status(1)
-                ),
-            ]);
+            $this->authenticate(); // hapus query => status(0/1)
         } elseif ($request->has('tag_id_card')) {
-            // Login menggunakan E-KTP tanpa password
             $this->authenticateEktp($request);
         }
 
@@ -136,6 +218,8 @@ class AuthenticatedSessionController extends Web_Controller
         }
         redirect(route('layanan-mandiri.beranda.index'));
     }
+
+
 
     public function destroy()
     {

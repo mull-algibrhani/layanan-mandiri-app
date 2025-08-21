@@ -67,19 +67,42 @@ class Mandiri_Controller extends MY_Controller
         /** @var App\Models\PendudukMandiri $user */
         $user = auth('penduduk')->user();
 
+        // $isMustVerify         = $user instanceof Illuminate\Contracts\Auth\MustVerifyEmail;
+        // $hasVerifiedEmail     = $isMustVerify && $user->hasVerifiedEmail();
+        // $hasVerifiedTelegram  = $isMustVerify && $user->hasVerifiedTelegram();
+        // $hasRequiredDocuments = $user->scan_ktp !== null && $user->scan_kk !== null && $user->foto_selfie !== null;
+
+        // if (! ($hasVerifiedEmail || $hasVerifiedTelegram) && $hasRequiredDocuments) {
+        //     return redirect('layanan-mandiri/daftar/verifikasi/email');
+        // }
+
+        //Periksa jika pengguna belum verifikasi email atau telegram dan sudah memiliki dokumen yang diperlukan.
+        // if (! $hasVerifiedEmail && $hasRequiredDocuments) {
+        //     // Pengguna belum memverifikasi email, arahkan ke halaman verifikasi email
+        //     return redirect('layanan-mandiri/daftar/verifikasi/email');
+        // }
+        // if (! $hasVerifiedTelegram && $hasRequiredDocuments) {
+        //     // Pengguna belum memverifikasi Telegram, arahkan ke halaman verifikasi Telegram
+        //     return redirect('layanan-mandiri/daftar/verifikasi/telegram');
+        // }
         $isMustVerify         = $user instanceof Illuminate\Contracts\Auth\MustVerifyEmail;
         $hasVerifiedEmail     = $isMustVerify && $user->hasVerifiedEmail();
         $hasVerifiedTelegram  = $isMustVerify && $user->hasVerifiedTelegram();
         $hasRequiredDocuments = $user->scan_ktp !== null && $user->scan_kk !== null && $user->foto_selfie !== null;
 
-        // Periksa jika pengguna belum verifikasi email atau telegram dan sudah memiliki dokumen yang diperlukan.
-        if (! $hasVerifiedEmail && $hasRequiredDocuments) {
-            // Pengguna belum memverifikasi email, arahkan ke halaman verifikasi email
+        // Jika belum melakukan salah satu verifikasi dan dokumen lengkap, arahkan ke verifikasi
+        if (! ($hasVerifiedEmail || $hasVerifiedTelegram) && $hasRequiredDocuments) {
             return redirect('layanan-mandiri/daftar/verifikasi/email');
         }
-        if (! $hasVerifiedTelegram && $hasRequiredDocuments) {
-            // Pengguna belum memverifikasi Telegram, arahkan ke halaman verifikasi Telegram
-            return redirect('layanan-mandiri/daftar/verifikasi/telegram');
-        }
+
+        // Jika sudah verifikasi (minimal salah satu) tapi admin belum menyetujui, jangan bisa login
+        // if ($user->aktif != 1) {
+        //     $this->session->set_flashdata('notif', 'Akun Anda sedang ditinjau oleh admin. Silakan tunggu persetujuan.');
+        //     return redirect('layanan-mandiri/masuk');
+        // }
+
+        // // Jika lolos semua, lanjut ke beranda
+        // return redirect('layanan-mandiri/beranda');
+
     }
 }
