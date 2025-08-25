@@ -127,19 +127,19 @@ Route::group('layanan-mandiri', ['namespace' => 'fmandiri'], static function ():
         Route::match(['GET', 'POST'], '/lapor/{id}', 'Kehadiran_perangkat@lapor')->name('layanan-mandiri.kehadiran_perangkat.lapor');
     });
 
-    Route::group('produk', static function (): void {
-        Route::get('/', 'Produk@index')->name('layanan-mandiri.produk.index');
-        Route::get('/datatables/{kat?}', 'Produk@datatables')->name('layanan-mandiri.produk.datatables');
-        Route::get('/form/{id?}', 'Produk@form')->name('layanan-mandiri.produk.form');
-        Route::post('/store', 'Produk@store')->name('layanan-mandiri.produk.store');
-        Route::post('/update/{id}', 'Produk@update')->name('layanan-mandiri.produk.update');
-        Route::get('/pengaturan', 'Produk@pengaturan')->name('layanan-mandiri.produk.pengaturan');
-        Route::post('/pengaturan-update', 'Produk@pengaturanUpdate')->name('layanan-mandiri.produk.pengaturan-update');
-    });
+    // Route::group('produk', static function (): void {
+    //     Route::get('/', 'Produk@index')->name('layanan-mandiri.produk.index');
+    //     Route::get('/datatables/{kat?}', 'Produk@datatables')->name('layanan-mandiri.produk.datatables');
+    //     Route::get('/form/{id?}', 'Produk@form')->name('layanan-mandiri.produk.form');
+    //     Route::post('/store', 'Produk@store')->name('layanan-mandiri.produk.store');
+    //     Route::post('/update/{id}', 'Produk@update')->name('layanan-mandiri.produk.update');
+    //     Route::get('/pengaturan', 'Produk@pengaturan')->name('layanan-mandiri.produk.pengaturan');
+    //     Route::post('/pengaturan-update', 'Produk@pengaturanUpdate')->name('layanan-mandiri.produk.pengaturan-update');
+    // });
 
-    Route::group('lapak', static function (): void {
-        Route::get('/{p?}', 'Lapak@index')->name('layanan-mandiri.lapak.index');
-    });
+    // Route::group('lapak', static function (): void {
+    //     Route::get('/{p?}', 'Lapak@index')->name('layanan-mandiri.lapak.index');
+    // });
 
     Route::group('verifikasi', static function (): void {
         Route::get('/', 'Verifikasi@index')->name('layanan-mandiri.verifikasi.index');

@@ -19,6 +19,13 @@
                             @endif
 
                             @includeWhen($data['status'] == 1, 'layanan_mandiri.layouts.components.notif', $data)
+                            @if ($data['status'] == 1)
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#notif').modal('show');
+                                    });
+                                </script>
+                            @endif
 
                             <div class="form-group">
                                 <label for="pin_lama">PIN Lama</label>
@@ -70,7 +77,6 @@
 
                             <div class="form-group">
                                 @if ($tgl_verifikasi_telegram || $tgl_verifikasi_email)
-                                    : ?>
                                     <label style="margin-top: 10px; margin-bottom: 0px;">Kirim PIN Baru Melalui : </label>
                                 @endif
 

@@ -27,14 +27,32 @@ class NetworkPrintConnector extends FilePrintConnector
      * @param string $timeout The connection timeout, in seconds.
      * @throws Exception Where the socket cannot be opened.
      */
+    // public function __construct($ip, $port = "9100", $timeout = false)
+    // {
+    //     // Default to 60 if default_socket_timeout isn't defined in the ini
+    //     $defaultSocketTimeout = ini_get("default_socket_timeout") ?: 60;
+    //     $timeout = $timeout ?: $defaultSocketTimeout;
+
+    //     $this -> fp = @fsockopen($ip, $port, $errno, $errstr, $timeout);
+    //     if ($this -> fp === false) {
+    //         throw new Exception("Cannot initialise NetworkPrintConnector: " . $errstr);
+    //     }
+    // }
     public function __construct($ip, $port = "9100", $timeout = false)
     {
-        // Default to 60 if default_socket_timeout isn't defined in the ini
+        if (empty($ip)) {
+            log_message('error', 'IP printer kosong, lewati proses printing');
+            return;
+        }
+
+        // Default timeout
         $defaultSocketTimeout = ini_get("default_socket_timeout") ?: 60;
         $timeout = $timeout ?: $defaultSocketTimeout;
 
-        $this -> fp = @fsockopen($ip, $port, $errno, $errstr, $timeout);
-        if ($this -> fp === false) {
+        $this->fp = @fsockopen($ip, $port, $errno, $errstr, $timeout);
+
+        if ($this->fp === false) {
+            log_message('error', "Tidak bisa konek ke printer $ip:$port - $errstr ($errno)");
             throw new Exception("Cannot initialise NetworkPrintConnector: " . $errstr);
         }
     }

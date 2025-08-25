@@ -301,10 +301,10 @@ class PendudukMandiri extends BaseModel implements AuthenticatableContract, Auth
 
         $pilihan_kirim = $ganti['pilihan_kirim'];
 
-        // Ganti password
+        // Ambil PIN lama dari database
         $pin = PendudukMandiri::where('id_pend', $id_pend)->first()->pin;
 
-        $data = [
+        $dataUpdate = [
             'id_pend'    => $id_pend,
             'pin'        => $pin_baru2,
             'last_login' => date('Y-m-d H:i:s', NOW()),
@@ -314,60 +314,72 @@ class PendudukMandiri extends BaseModel implements AuthenticatableContract, Auth
         switch (true) {
             case akun_demo($id_pend):
                 $respon = [
-                    'status' => -1, // Notif gagal
+                    'status' => -1,
                     'pesan'  => 'Tidak dapat mengubah PIN akun demo',
                 ];
                 break;
 
             case $pin_lama != $pin:
                 $respon = [
-                    'status' => -1, // Notif gagal
+                    'status' => -1,
                     'pesan'  => 'PIN gagal diganti, <b>PIN Lama</b> yang anda masukkan tidak sesuai',
                 ];
                 break;
 
             case $pin_baru2 == $pin:
                 $respon = [
-                    'status' => -1, // Notif gagal
-                    'pesan'  => '<b>PIN</b> gagal diganti, Silahkan ganti <b>PIN Lama</b> anda dengan <b>PIN Baru</b> ',
+                    'status' => -1,
+                    'pesan'  => '<b>PIN</b> gagal diganti, Silahkan ganti <b>PIN Lama</b> anda dengan <b>PIN Baru</b>',
                 ];
                 break;
 
-            case $pilihan_kirim == 'kirim_telegram':
-                if ($this->kirimTelegram(['id_pend' => $id_pend, 'pin' => $ganti['pin_baru2'], 'nama' => $nama])) {
-                    $respon = [
-                        'status' => 1, // Notif berhasil
-                        'aksi'   => site_url('layanan-mandiri/keluar'),
-                        'pesan'  => 'PIN Baru sudah dikirim ke Akun Telegram Anda',
-                    ];
-                } else {
-                    $respon = [
-                        'status' => -1, // Notif gagal
-                        'pesan'  => '<b>PIN Baru</b> gagal dikirim ke Telegram, silahkan hubungi operator',
-                    ];
-                }
-                break;
-
             case $pilihan_kirim == 'kirim_email':
-                if ($this->kirimEmail(['id_pend' => $id_pend, 'pin' => $ganti['pin_baru2'], 'nama' => $nama])) {
+                PendudukMandiri::where('id_pend', $id_pend)->update($dataUpdate);
+
+                if ($this->kirimpintoEmail([
+                    'id_pend' => $id_pend,
+                    'pin'     => $ganti['pin_baru2'], // kirim pin asli, bukan hash
+                    'nama'    => $nama
+                ])) {
                     $respon = [
-                        'status' => 1, // Notif berhasil
+                        'status' => 1,
                         'aksi'   => site_url('layanan-mandiri/keluar'),
                         'pesan'  => 'PIN Baru sudah dikirim ke Akun Email Anda',
                     ];
                 } else {
                     $respon = [
-                        'status' => -1, // Notif gagal
+                        'status' => -1,
                         'pesan'  => '<b>PIN Baru</b> gagal dikirim ke Email, silahkan hubungi operator',
                     ];
                 }
                 break;
 
+            case $pilihan_kirim == 'kirim_telegram':
+                PendudukMandiri::where('id_pend', $id_pend)->update($dataUpdate);
+
+                if ($this->kirimpintoTelegram([
+                    'id_pend' => $id_pend,
+                    'pin'     => $ganti['pin_baru2'], // kirim pin asli
+                    'nama'    => $nama
+                ])) {
+                    $respon = [
+                        'status' => 1,
+                        'aksi'   => site_url('layanan-mandiri/keluar'),
+                        'pesan'  => 'PIN Baru sudah dikirim ke Akun Telegram Anda',
+                    ];
+                } else {
+                    $respon = [
+                        'status' => -1,
+                        'pesan'  => '<b>PIN Baru</b> gagal dikirim ke Telegram, silahkan hubungi operator',
+                    ];
+                }
+                break;
+
             default:
-                PendudukMandiri::where('id_pend', $id_pend)->update($data);
+                PendudukMandiri::where('id_pend', $id_pend)->update($dataUpdate);
 
                 $respon = [
-                    'status' => 1, // Notif berhasil
+                    'status' => 1,
                     'aksi'   => site_url('layanan-mandiri/keluar'),
                     'pesan'  => 'PIN berhasil diganti, silahkan masuk kembali dengan Kode PIN : ' . $ganti['pin_baru2'],
                 ];
@@ -375,7 +387,50 @@ class PendudukMandiri extends BaseModel implements AuthenticatableContract, Auth
         }
 
         set_session('notif', $respon);
-
         return $respon;
     }
+
+
+    public function kirimpintoEmail($data): bool
+    {
+        try {
+            \Log::info("Masuk kirimpintoEmail", $data);
+
+            app(\App\Libraries\OTP\OtpManager::class)
+                ->driver('email')
+                ->kirimPinBaru(
+                    // parameternya: email tujuan, pin, nama
+                    // ambil email warga dari tabel penduduk
+                    Penduduk::find($data['id_pend'])->email,
+                    $data['pin'],
+                    $data['nama']
+                );
+
+            return true;
+        } catch (\Throwable $e) {
+            \Log::error("Gagal kirim email PIN baru: " . $e->getMessage(), $data);
+            return false;
+        }
+    }
+
+    public function kirimpintoTelegram($data): bool
+    {
+        try {
+            \Log::info("Masuk kirimpintoTelegram", $data);
+
+            app(\App\Libraries\OTP\OtpManager::class)
+                ->driver('telegram')
+                ->kirimPinBaru(
+                    Penduduk::find($data['id_pend'])->telegram,
+                    $data['pin'],
+                    $data['nama']
+                );
+
+            return true;
+        } catch (\Throwable $e) {
+            \Log::error("Gagal kirim telegram PIN baru: " . $e->getMessage(), $data);
+            return false;
+        }
+    }
+
 }

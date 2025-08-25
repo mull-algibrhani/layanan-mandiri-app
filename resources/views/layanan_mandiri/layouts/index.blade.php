@@ -78,7 +78,7 @@
                             <li><a href="{{ site_url('layanan-mandiri/profil') }}">Profil</a></li>
                             <li><a href="{{ site_url('layanan-mandiri/permohonan-surat') }}">Surat</a></li>
                             <li><a href="{{ site_url('layanan-mandiri/pesan-masuk') }}">Pesan</a></li>
-                            <li><a href="{{ site_url('layanan-mandiri/lapak') }}">Lapak</a></li>
+                            <!-- <li><a href="{{ site_url('layanan-mandiri/lapak') }}">Lapak</a></li> -->
                             <li><a href="{{ site_url('layanan-mandiri/bantuan') }}">Bantuan</a></li>
                             <li><a href="{{ site_url('layanan-mandiri/kehadiran') }}">Perangkat</a></li>
                         </ul>
@@ -150,7 +150,7 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="{{ site_url('layanan-mandiri/lapak') }}">
+                        <!-- <a href="{{ site_url('layanan-mandiri/lapak') }}">
                             <div class="col-md-3 col-sm-6 col-xs-12">
                                 <div class="info-box bg-aqua">
                                     <span class="info-box-icon"><i class="fa fa-cart-plus"></i></span>
@@ -159,7 +159,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </a>
+                        </a> -->
                         <a href="{{ site_url('layanan-mandiri/kehadiran') }}">
                             <div class="col-md-3 col-sm-6 col-xs-12">
                                 <div class="info-box bg-red">
@@ -184,9 +184,9 @@
                                     <a href="{{ $ci->is_login->ganti_pin === '1' ? '#' : site_url('layanan-mandiri/profil') }}" class="btn btn-block btn-social bg-blue">
                                         <i class="fa fa-user-o"></i> Profil
                                     </a>
-                                    <a href="{{ $ci->is_login->ganti_pin === '1' ? '#' : site_url('layanan-mandiri/produk') }}" class="btn btn-block btn-social bg-blue">
+                                    <!-- <a href="{{ $ci->is_login->ganti_pin === '1' ? '#' : site_url('layanan-mandiri/produk') }}" class="btn btn-block btn-social bg-blue">
                                         <i class="fa fa-cart-plus"></i> Produk
-                                    </a>
+                                    </a> -->
                                     <a href="{{ $ci->is_login->ganti_pin === '1' ? '#' : site_url('layanan-mandiri/cetak-biodata') }}" class="btn btn-block btn-social bg-green" target="_blank" rel="noopener noreferrer">
                                         <i class="fa fa-print"></i> Cetak Biodata
                                     </a>

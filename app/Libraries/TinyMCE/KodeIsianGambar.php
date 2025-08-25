@@ -53,6 +53,8 @@ class KodeIsianGambar
     {
         $this->ci = &get_instance();
         $this->ci->load->model('surat_model');
+        // Load helper normalize_path
+        $this->ci->load->helper('path'); // 'load path_helper.php dari folder helpers
     }
 
     public static function set($request, $result, $surat = null, $lampiran = false): array
@@ -63,41 +65,47 @@ class KodeIsianGambar
     public function setKodeIsianGambar(): array
     {
         // Logo Surat
-        $file_logo    = ($this->request['logo_garuda'] ? FCPATH . LOGO_GARUDA : gambar_desa(identitas()->logo, false, true));
-        $logo         = (is_file($file_logo)) ? '<img src="' . $file_logo . '" width="90" height="90" alt="logo-surat" />' : '';
+        $file_logo = $this->request['logo_garuda']
+            ? normalize_path(FCPATH . LOGO_GARUDA)
+            : normalize_path(gambar_desa(identitas()->logo, false, true));
+
+        $logo = (is_file($file_logo))
+            ? '<img src="' . $file_logo . '" width="90" height="90" alt="logo-surat" />'
+            : '';
         $this->result = str_ireplace('[logo]', $logo, $this->result);
 
         // Logo BSrE
-        $file_logo_bsre = FCPATH . LOGO_BSRE;
-        $bsre           = (is_file($file_logo_bsre) && setting('tte') == 1) ? '<img src="' . $file_logo_bsre . '" height="90" alt="logo-bsre" />' : '';
-        $this->result   = str_ireplace('[logo_bsre]', $bsre, $this->result);
+        $file_logo_bsre = normalize_path(FCPATH . LOGO_BSRE);
+        $bsre = (is_file($file_logo_bsre) && setting('tte') == 1)
+            ? '<img src="' . $file_logo_bsre . '" height="90" alt="logo-bsre" />'
+            : '';
+        $this->result = str_ireplace('[logo_bsre]', $bsre, $this->result);
 
         // Foto Penduduk
-        // TODO:: Sederhanakan cara ini, seharusnya key dan value dari kode isian berada di 1 tempat yang sama
         $foto = Penduduk::find($this->surat['id_pend'])->foto;
-        if (file_exists(FCPATH . LOKASI_USER_PICT . $foto)) {
-            $file_foto     = FCPATH . LOKASI_USER_PICT . $foto;
+        $file_foto = normalize_path(FCPATH . LOKASI_USER_PICT . $foto);
+
+        if (file_exists($file_foto)) {
             $foto_penduduk = '<img src="' . $file_foto . '" width="90" height="auto" alt="foto-penduduk" />';
-            $this->result  = str_ireplace('[foto_penduduk]', $foto_penduduk, $this->result);
+            $this->result = str_ireplace('[foto_penduduk]', $foto_penduduk, $this->result);
         } else {
             $this->result = str_ireplace('[foto_penduduk]', '', $this->result);
         }
 
         // QR_Code Surat
         if ($this->surat && $this->request['qr_code']) {
-            // dd('in', $this->request, $this->result, $this->surat);
-            $cek    = $this->surat_model->buatQrCode($this->surat->nama_surat);
-            $qrcode = ($cek['viewqr']) ? '<img src="' . $cek['viewqr'] . '" width="90" height="90" alt="qrcode-surat" />' : '';
+            $cek = $this->surat_model->buatQrCode($this->surat->nama_surat);
+            $qrcode = ($cek['viewqr']) ? '<img src="' . normalize_path($cek['viewqr']) . '" width="90" height="90" alt="qrcode-surat" />' : '';
+
             preg_match('/<img[^>]+src="([^"]*qrcode[^"]*temp[^"]*)"/i', $this->result, $matches);
 
             if (isset($matches[1])) {
-                $src = $matches[1];
-                if (! file_exists($src)) {
-                    $this->result = str_replace($src, $cek['viewqr'], $this->result);
+                $src = normalize_path($matches[1]);
+                if (!file_exists($src)) {
+                    $this->result = str_replace($src, normalize_path($cek['viewqr']), $this->result);
                     $this->surat->update(['isi_surat' => $this->result]);
                 }
             } else {
-                // cek juga jika lampiran true maka tidak perlu verifikasi_kades
                 if ((setting('tte') == 1 && ($this->surat->verifikasi_kades == LogSurat::TERIMA || $this->lampiran)) || setting('tte') == 0) {
                     $this->result = str_replace('[qr_code]', $qrcode, $this->result);
                 }
@@ -107,8 +115,8 @@ class KodeIsianGambar
         } else {
             $qrcode = '';
             if ($this->request['qr_code']) {
-                $cek    = dummyQrCode($this->header['desa']['logo']);
-                $qrcode = ($cek['viewqr']) ? '<img src="' . $cek['viewqr'] . '" width="90" height="90" alt="qrcode-surat" />' : '';
+                $cek = dummyQrCode($this->header['desa']['logo']);
+                $qrcode = ($cek['viewqr']) ? '<img src="' . normalize_path($cek['viewqr']) . '" width="90" height="90" alt="qrcode-surat" />' : '';
             }
             $this->result = str_replace('[qr_code]', $qrcode, $this->result);
         }
@@ -118,6 +126,66 @@ class KodeIsianGambar
             'urls_id' => $this->urls_id,
         ];
     }
+
+
+    // public function setKodeIsianGambar(): array
+    // {
+    //     // Logo Surat
+    //     $file_logo    = ($this->request['logo_garuda'] ? FCPATH . LOGO_GARUDA : gambar_desa(identitas()->logo, false, true));
+    //     $logo         = (is_file($file_logo)) ? '<img src="' . $file_logo . '" width="90" height="90" alt="logo-surat" />' : '';
+    //     $this->result = str_ireplace('[logo]', $logo, $this->result);
+
+    //     // Logo BSrE
+    //     $file_logo_bsre = FCPATH . LOGO_BSRE;
+    //     $bsre           = (is_file($file_logo_bsre) && setting('tte') == 1) ? '<img src="' . $file_logo_bsre . '" height="90" alt="logo-bsre" />' : '';
+    //     $this->result   = str_ireplace('[logo_bsre]', $bsre, $this->result);
+
+    //     // Foto Penduduk
+    //     // TODO:: Sederhanakan cara ini, seharusnya key dan value dari kode isian berada di 1 tempat yang sama
+    //     $foto = Penduduk::find($this->surat['id_pend'])->foto;
+    //     if (file_exists(FCPATH . LOKASI_USER_PICT . $foto)) {
+    //         $file_foto     = FCPATH . LOKASI_USER_PICT . $foto;
+    //         $foto_penduduk = '<img src="' . $file_foto . '" width="90" height="auto" alt="foto-penduduk" />';
+    //         $this->result  = str_ireplace('[foto_penduduk]', $foto_penduduk, $this->result);
+    //     } else {
+    //         $this->result = str_ireplace('[foto_penduduk]', '', $this->result);
+    //     }
+
+    //     // QR_Code Surat
+    //     if ($this->surat && $this->request['qr_code']) {
+    //         // dd('in', $this->request, $this->result, $this->surat);
+    //         $cek    = $this->surat_model->buatQrCode($this->surat->nama_surat);
+    //         $qrcode = ($cek['viewqr']) ? '<img src="' . $cek['viewqr'] . '" width="90" height="90" alt="qrcode-surat" />' : '';
+    //         preg_match('/<img[^>]+src="([^"]*qrcode[^"]*temp[^"]*)"/i', $this->result, $matches);
+
+    //         if (isset($matches[1])) {
+    //             $src = $matches[1];
+    //             if (! file_exists($src)) {
+    //                 $this->result = str_replace($src, $cek['viewqr'], $this->result);
+    //                 $this->surat->update(['isi_surat' => $this->result]);
+    //             }
+    //         } else {
+    //             // cek juga jika lampiran true maka tidak perlu verifikasi_kades
+    //             if ((setting('tte') == 1 && ($this->surat->verifikasi_kades == LogSurat::TERIMA || $this->lampiran)) || setting('tte') == 0) {
+    //                 $this->result = str_replace('[qr_code]', $qrcode, $this->result);
+    //             }
+    //         }
+
+    //         $this->urls_id = $cek['urls_id'];
+    //     } else {
+    //         $qrcode = '';
+    //         if ($this->request['qr_code']) {
+    //             $cek    = dummyQrCode($this->header['desa']['logo']);
+    //             $qrcode = ($cek['viewqr']) ? '<img src="' . $cek['viewqr'] . '" width="90" height="90" alt="qrcode-surat" />' : '';
+    //         }
+    //         $this->result = str_replace('[qr_code]', $qrcode, $this->result);
+    //     }
+
+    //     return [
+    //         'result'  => $this->result,
+    //         'urls_id' => $this->urls_id,
+    //     ];
+    // }
 
     public function __get($name)
     {

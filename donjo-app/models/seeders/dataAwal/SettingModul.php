@@ -417,7 +417,7 @@ class SettingModul extends CI_Model
             [
                 'modul'      => 'Kotak Pesan',
                 'slug'       => 'kotak-pesan',
-                'url'        => 'mailbox/clear',
+                'url'        => 'mailbox',
                 'aktif'      => 1,
                 'ikon'       => 'fa-wechat',
                 'urut'       => 1,
@@ -429,7 +429,7 @@ class SettingModul extends CI_Model
             [
                 'modul'      => 'Pendaftar Layanan Mandiri',
                 'slug'       => 'pendaftar-layanan-mandiri',
-                'url'        => 'mandiri/clear',
+                'url'        => 'mandiri',
                 'aktif'      => 1,
                 'ikon'       => 'fa-500px',
                 'urut'       => 2,

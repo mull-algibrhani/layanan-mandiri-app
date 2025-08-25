@@ -208,15 +208,15 @@ class VerificationNotificationController extends Web_Controller
         // }
 
         // // Logout user after verify
-        // auth('penduduk')->logout();
+        auth('penduduk')->logout();
 
-        // $this->session->unset_userdata([
-        //     'mandiri', 'is_login',
-        //     'is_anjungan', 'data_permohonan',
-        //     'auth_mandiri', 'login_ektp',
-        // ]);
+        $this->session->unset_userdata([
+            'mandiri', 'is_login',
+            'is_anjungan', 'data_permohonan',
+            'auth_mandiri', 'login_ektp',
+        ]);
 
-        // redirect_with('notif', 'Anda sudah terdaftar di Layanan Mandiri. Saat ini, akun Anda sedang ditinjau oleh admin. Silakan tunggu konfirmasi lebih lanjut sebelum dapat melakukan login.', 'layanan-mandiri/masuk');
+        redirect_with('notif', 'Anda sudah terdaftar di Layanan Mandiri. Saat ini, akun Anda sedang ditinjau oleh admin. Silakan tunggu konfirmasi lebih lanjut sebelum dapat melakukan login.', 'layanan-mandiri/masuk');
 
         // cukup salah satu (email atau telegram)
         if ($user->hasVerifiedEmail() || $user->hasVerifiedTelegram()) {

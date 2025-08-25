@@ -35,12 +35,15 @@
  *
  */
 
+ use App\Libraries\OTP\OtpManager;
+
 defined('BASEPATH') || exit('No direct script access allowed');
 
 class Mandiri_Controller extends MY_Controller
 {
     public $CI;
     public $is_login;
+    protected OtpManager $otp;
 
     public function __construct()
     {
@@ -50,6 +53,9 @@ class Mandiri_Controller extends MY_Controller
         $CI             = &get_instance();
         $this->is_login = $this->session->is_login;
         $this->header   = identitas();
+
+        // ✅ Inisialisasi OTP Manager di sini
+        $this->otp = new OtpManager();
 
         if (setting('layanan_mandiri') == 0 && ! $this->cek_anjungan) {
             show_404();

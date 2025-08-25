@@ -83,7 +83,8 @@ class Migrasi_2024050171 extends MY_Model
 
     protected function migrasi_20240401471()
     {
-        Modul::where('slug', 'arsip-surat-dinas')->update(['url' => 'arsip_surat_dinas']);
+        // Modul::where('slug', 'arsip-surat-dinas')->update(['url' => 'arsip_surat_dinas']);
+        Modul::where('slug', 'arsip-surat-dinas')->update(['url' => 'surat_dinas_arsip']);
     }
 
     protected function migrasi_2024041951()

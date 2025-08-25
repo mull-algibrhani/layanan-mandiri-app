@@ -120,7 +120,7 @@
                     <textarea id="isi_singkat" name="isi_singkat" class="form-control input-sm required" placeholder="Isi Singkat/Perihal" rows="5">{{ $surat_masuk['isi_singkat'] }}</textarea>
                 </div>
             </div>
-            <div class="form-group" id="grp_disposisi">
+            <!-- <div class="form-group" id="grp_disposisi">
                 <label class="col-sm-3 control-label" for="disposisi_kepada">Disposisi Kepada</label>
                 <div class="col-sm-8 col-lg-8">
                     <div id="op_item" class="checkbox-group required">
@@ -137,7 +137,7 @@
                 <div class="col-sm-8 col-lg-8">
                     <label id="msg_disposisi" class="error">Kolom ini diperlukan.</label>
                 </div>
-            </div>
+            </div> -->
             <div class="form-group">
                 <label class="col-sm-3 control-label" for="isi_disposisi">Isi Disposisi</label>
                 <div class="col-sm-8">
@@ -152,37 +152,3 @@
         </form>
     </div>
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('js/custom-select2.js') }}"></script>
-    <script>
-        $(function() {
-            var keyword = @json($pengirim);
-            $("#pengirim").autocomplete({
-                source: keyword,
-                maxShowItems: 10,
-            });
-        });
-
-        function submit_form() {
-            if ($('div.checkbox-group.required :checkbox:checked').length > 0) {
-                $("#validasi").submit();
-            }
-            event.preventDefault();
-
-            cek();
-        }
-
-        $("#msg_disposisi").hide();
-
-        function cek() {
-            if ($('div.checkbox-group.required :checkbox:checked').length > 0) {
-                $("#msg_disposisi").hide();
-                $("#grp_disposisi").closest(".form-group").removeClass("has-error");
-            } else {
-                $("#msg_disposisi").show();
-                $("#grp_disposisi").closest(".form-group").addClass("has-error");
-            }
-        }
-    </script>
-@endpush

@@ -120,7 +120,6 @@ class Beranda extends Mandiri_Controller
             'cek_anjungan'            => $this->cek_anjungan,
             'form_action'             => site_url('layanan-mandiri/proses-ganti-pin'),
         ];
-
         return view('layanan_mandiri.pin.ganti_pin', $data);
     }
 
@@ -129,8 +128,7 @@ class Beranda extends Mandiri_Controller
         $id_pend         = $this->is_login->id_pend;
         $nama            = $this->session->is_login->nama;
         $pendudukMandiri = new PendudukMandiri();
-        $pendudukMandiri->gantiPin($id_pend, $nama, $this->input->post());
-
+        $respon = (new PendudukMandiri())->gantiPin($id_pend, $nama, $this->input->post());
         redirect('layanan-mandiri/ganti-pin');
     }
 

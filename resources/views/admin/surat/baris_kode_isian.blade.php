@@ -1,5 +1,8 @@
-    <div class="form-group" data-kategori="{{ $keyname ?? '' }}">
-        <label for="{{ str_replace(['[form_', ']'], '', $groupLabel[0]->kode) }}" class="col-sm-3 control-label">{{ $label }}</label>
+    <!-- <div class="form-group" data-kategori="{{ $keyname ?? '' }}">
+         @php
+        $firstKode = is_array($groupLabel) ? ($groupLabel[0]->kode ?? '') : ($groupLabel->kode ?? '');
+        @endphp
+        <label for="{{ str_replace(['[form_', ']'], '', $firstKode) }}" class="col-sm-3 control-label">{{ $label }}</label>
         <div class="col-sm-9 row">
             @foreach ($groupLabel as $item)
                 @php
@@ -60,10 +63,11 @@
                         </div>
                     </div>
                 @else
-                    <div class="{{ $widthClass }}" {!! count($groupLabel) > 2 ? 'style="margin-bottom: 10px"' : '' !!}>
+                    <div class="{{ $widthClass }}"  {!! (is_countable($groupLabel) && count($groupLabel) > 2) ? 'style="margin-bottom: 10px"' : '' !!}>
                         <input type="{{ $item->tipe }}" {!! $class !!} name="{{ $nama }}" placeholder="{{ $item->deskripsi }}" value="{{ set_value($nama) }}" />
                     </div>
+
                 @endif
             @endforeach
         </div>
-    </div>
+    </div> -->

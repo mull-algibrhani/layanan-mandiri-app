@@ -56,16 +56,32 @@ class NewPasswordController extends MY_Controller
      *
      * @param mixed $token
      */
-    public function create($token)
+    // public function create($token)
+    // {
+    //     $request = request();
+
+    //     return view('layanan_mandiri.auth.reset-password', [
+    //         'header'             => $this->header,
+    //         'latar_login'        => $this->latar_login,
+    //         'logo_bsre'          => default_file(LOGO_BSRE, false),
+    //         $this->via($request) => $request->{$this->via($request)},
+    //         'token'              => $token,
+    //     ]);
+    // }
+
+    public function create($token = null)
     {
         $request = request();
+        $email    = $this->input->get('email');     // dari query string
+        $telegram = $this->input->get('telegram');  // kalau ada
 
         return view('layanan_mandiri.auth.reset-password', [
-            'header'             => $this->header,
-            'latar_login'        => $this->latar_login,
-            'logo_bsre'          => default_file(LOGO_BSRE, false),
-            $this->via($request) => $request->{$this->via($request)},
-            'token'              => $token,
+            'header'      => $this->header,
+            'latar_login' => $this->latar_login,
+            'logo_bsre'   => default_file(LOGO_BSRE, false),
+            'token'       => $token,
+            'email'       => $email,
+            'telegram'    => $telegram,
         ]);
     }
 
