@@ -203,7 +203,7 @@
                 minimumInputLength: 1,
             });
 
-            // kaitkan data 
+            // kaitkan data
             $('select[data-kaitkan]').each(function() {
                 let _kaitkan = $(this).data('kaitkan')
                 let _kategori = $(this).closest('.form-group').data('kategori')
